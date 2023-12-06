@@ -1,0 +1,85 @@
+<div>
+    <div class="container">
+
+      <div class="row cant d-flex justify-content-center align-items-center">
+
+          <div class="col-md-6">
+
+             <div class="p-3 card">
+
+              <div class="d-flex justify-content-between align-items-center p-3 music">
+
+                  <div class="d-flex flex-row align-items-center">
+
+                      <i class="fa fa-music color"></i>
+                      <small class="ml-2">Shannon jin pride - The Usual [Beat, Jess Scott]</small>
+                      
+                  </div>
+                  <i class="fa fa-check color"></i>
+              </div>
+
+
+
+
+
+              <div>
+                <div class="container ms-2">
+                  {% for song_dictionary in songs %}
+                  <div class="song-small mt-3 col-6 align-items-center d-flex">
+                      
+                      <div class="col d-flex align-items-center" style="height: 48px;">
+                          <img class="rounded m-1 mt-0" src="https://images.macrumors.com/t/MKlRm9rIBpfcGnjTpf6ZxgpFTUg=/1600x1200/smart/article-new/2018/05/apple-music-note.jpg" style="width: 50px; height: 48px; object-fit: cover;">
+                          <div class="text-white h6 ms-2">
+                              <div>Song name: {{ song_dictionary.song_name }}</div>
+                              <small class="text-muted">Artist: {{ song_dictionary.artist }}</small>
+                          </div>
+                      </div>
+                      
+                      <a href="/music_player/{{ song_dictionary.song_ID }}" class="col-2 d-flex align-items-center justify-content-center">
+                          <img class="bg-white rounded-circle" style="width: 20px; height: 20px;" src="/static/play_icon.svg">
+                      </a>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+
+
+              
+
+            
+                  
+                  <button class="btn btn-danger btn-block playlist text-uppercase"><i class="fa fa-shopping-cart"></i>  My Playlist</button>
+          
+
+
+
+
+
+
+                          
+             </div>  
+              
+          </div>
+          
+      </div>
+        
+
+    </div>
+
+
+<!-- playlist song display -->
+
+<div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+    <button class="btn btn-warning" style="width:150px; height:40px" onclick="openPopup()">Your Songs</button>
+    <div id="playlistPopup" class="popup" style="width: 132px">
+        <div class="popup-content">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <h2>Create a Playlist</h2>
+        <form action="/create_playlist_action" method='POST'>
+            <label for="playlistName">Playlist Name:</label>
+            <input type="text" id="playlistName" name="playlistName" required>
+            <input type="text" name="song_id" value="{{song_dictionary.song_ID}}" hidden>
+            <input type="submit" value="Create Playlist">
+        </form>
+        </div>
+    </div>

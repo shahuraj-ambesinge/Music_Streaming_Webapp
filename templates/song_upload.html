@@ -1,0 +1,51 @@
+{% extends "base_index.html" %}
+{% block main %}
+<div class="container d-flex min-vh-80 justify-content-center align-items-center">
+  <div class="row mb-3" >
+    <form class="w-80 p-0 ms-5 me-5 " action="/song_upload_action" method='POST'  enctype="multipart/form-data">
+        <div class="col-md-12">
+          <label for="songdetails" class="form-label text-white">Song Name</label>
+          <input type="text" class="form-control" name="song_name" id="inputEmail4">
+        </div>
+
+        <div class="col-md-12 ">
+          <label for="genre" class="form-label text-white">Genre</label>
+          <input type="text" class="form-control" name="genre" id="inputPassword4">
+        </div>
+
+        <div class="col-12">
+          <label for="artist" class="form-label text-white">Artist</label>
+          <input type="text" class="form-control" name="artist" id="inputAddress" placeholder="A R Rahman">
+        </div>
+
+        <div class="mb-2 col-md-12">
+          <label for="exampleFormControlTextarea1" class="form-label text-white">Lyrics</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" name="lyrics" rows="3" placeholder="jai ho" ></textarea>
+        </div>
+
+        <div class="col-md-12">
+          <label for="inputCity" class="form-label text-white">Duration</label>
+          <input type="text" class="form-control" name="duration" id="inputCity">
+        </div>
+
+        <div class="mt-2 w-1 h-2">
+            <label for="inputCity" class="form-label text-white">Album</label>
+            <input type="text" class="form-control" name="album" id="inputCity">
+        </div>
+
+        <div class="mb-2">
+            <input class="mt-4 btn btn-lg btn-primary col-7" name="file" type="file" id="formFile">
+            <button class="mt-4 btn btn-lg btn-primary ms-5" type="submit" class="btn btn-primary">Submit</button>
+        </div>
+
+        <div class="d-flex justify-content-end mb-1 me-1">
+            
+        </div>
+
+        
+
+    </form>
+  </div>
+
+</div>
+{% endblock %}  

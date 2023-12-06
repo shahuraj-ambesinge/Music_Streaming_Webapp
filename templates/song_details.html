@@ -1,0 +1,37 @@
+{% extends "base_index.html" %}
+{% block main %}
+
+<style>
+    h5 {
+      color: white;
+    }
+    h4 {
+      color: white;
+    }
+    h3 {
+      color: white;
+    }
+
+
+</style>
+
+
+<div class="container my-4" bg-color>
+    <h3>Song:{{ song_dictionary.song_name }}</h3>
+    <audio id="audioPlayer" controls>
+        <source src="static/songs/{{ song_dictionary.song_name }}" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <br><h4>Genre:</h4><h5>{{ song_dictionary.enre }}</h5>
+    <br><h4>Artist:</h4><h5>{{ song_dictionary.artist }}</h5>
+    <br><h4>Lyrics:</h4><h5>{{ song_dictionary.lyrics }}</h5>
+    <br><h4>Duration:</h4><h5>{{ song_dictionary.duration }}</h5>
+    <br><h4>Date_created:</h4><h5>{{ song_dictionary.dateCreated }}</h5>
+    <br><h4>Album:</h4><h5>{{ song_dictionary.album }}</h5>
+</div>
+
+
+{% endblock %}

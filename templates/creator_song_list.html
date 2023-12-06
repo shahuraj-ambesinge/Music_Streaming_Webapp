@@ -1,20 +1,8 @@
 {% extends "base_index.html" %}
 <link rel="stylesheet" type="text/css" href="static/custom.css">
 
-{% block creator_register %}
-<a class="nav-link active" href="/user_creator">Register as Creator</a>
-{% endblock %}
+{% block creator_song_list %}
 
-{% block logout %}
-<a href= '/logout' type="button" class="btn btn-warning">Logout</a>
-{% endblock %}
-
-{% block icon %}
-<a class="nav-link" href="/user_profile" tabindex="-1"><img class=" rounded circle" width="25px" src="/static/profile_icon.png" alt="Profile"></a>
-{% endblock %}
-
-
-{% block song_list %}
 <div class="container ms-2">
     {% for song_dictionary in songs %}
     <div class="song-small mt-3 col-6 align-items-center d-flex">
@@ -26,16 +14,13 @@
                 <small class="text-muted">Artist: {{ song_dictionary.artist }}</small>
             </div>
         </div>
-        <div class="col-2 text-muted">00:{{ song_dictionary.duration }}</div>
-        <a href="/music_player/{{ song_dictionary.song_ID }}" class="col-2 d-flex align-items-center justify-content-center">
+        <div class="col-2 text-white">00:{{ song_dictionary.duration }}</div>
+        <a href="/creator_music_player/{{ song_dictionary.song_ID }}" class="col-2 d-flex align-items-center justify-content-center">
             <img class="bg-white rounded-circle" style="width: 20px; height: 20px;" src="/static/play_icon.svg">
         </a>
     </div>
     
     {% endfor %}
 </div>
+
 {% endblock %}
-
-
-
-

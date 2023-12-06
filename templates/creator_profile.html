@@ -1,0 +1,11 @@
+{% extends "base_profile.html" %}
+
+{% block profile %}
+<img src="https://cdn-icons-png.flaticon.com/512/6915/6915987.png" class="flex-shrink-0 me-3" alt="..." width="200" height="200">
+<div>
+<h5 class="mt-0">Name:   {{creator_dictionary.creator_name}}</h5>
+<p><b>Bio:   {{type}}</b></p>
+<p><b>Gender:   {{creator_dictionary.gender}}</b></p>
+<p><b>Email:  {{creator_dictionary.email}}</b></p>
+</div>
+{% endblock %}

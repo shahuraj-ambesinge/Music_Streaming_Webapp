@@ -1,0 +1,452 @@
+{% extends "base_index.html" %}
+
+<link rel="stylesheet" type="text/css" href="static/custom.css">
+
+{% block creator_register %}
+<a class="nav-link active" href="/user_creator">Register as Creator</a>
+{% endblock %}
+
+{% block logout %}
+<a href= '/logout' type="button" class="btn btn-warning">Logout</a>
+{% endblock %}
+
+{% block icon %}
+<a class="nav-link" href="/user_profile" tabindex="-1"><img width="25px" src="/static/profile_icon.png" alt="Profile"></a>
+{% endblock %}
+
+{% block music_player %}
+<div class="row">
+  <div class="col ms-1">
+    <div class="player container">
+        <div class="details">
+          <div class="now-playing h5">PLAYING x OF y</div>
+          <div class="track-art"></div>
+          <div class="track-name">Track Name</div>
+          <div class="track-artist">Track Artist</div>
+        </div>
+        <div class="buttons">
+          <div class="prev-track" onclick="prevTrack()"><i class="fa fa-step-backward fa-2x"></i></div>
+          <div class="playpause-track" onclick="playpauseTrack()"><i class="fa fa-play-circle fa-5x"></i></div>
+          <div class="next-track" onclick="nextTrack()"><i class="fa fa-step-forward fa-2x"></i></div>
+        </div>
+        <div class="slider_container">
+          <div class="current-time">00:00</div>
+          <input type="range" min="1" max="100" value="0" class="seek_slider" onchange="seekTo()">
+          <div class="total-duration">00:00</div>
+        </div>
+        <div class="slider_container">
+          <i class="fa fa-volume-down"></i>
+          <input type="range" min="1" max="100" value="99" class="volume_slider" onchange="setVolume()">
+          <i class="fa fa-volume-up"></i>
+        </div>
+      </div>
+  </div>
+
+  <div class="col-3 text-black">
+    <div><h5>Lyrics:</h5>
+      <div>{{ song_dictionary.lyrics }}</div>
+    </div>
+  </div>
+
+
+  <!-- Rating --------------------------- -->
+  <div class="container col ms-4">
+    <div class="column" >
+      <div class="content ms-5">
+      <div class="content mt-2"><h4>{{ rating_avg }}/5 <h6>({{ rating_count }} reviews)</h6></h4></div>
+      <div class="content mt-3"><h6> Rate This Song </h6></div>
+      <div class="content">
+        <form  action="/action_rating_upload" method="POST">
+          <div class="container col mt-3">
+              <div class="form-check form-check-inline text-black">
+                <input class="form-check-input " type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
+                <label class="form-check-label" for="inlineRadio1">1</label>
+              </div>
+              <div class="form-check form-check-inline text-black">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+                <label class="form-check-label" for="inlineRadio2">2</label>
+              </div>
+              <div class="form-check form-check-inline text-black">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="3">
+                <label class="form-check-label" for="inlineRadio3">3</label>
+              </div>
+              <div class="form-check form-check-inline text-black">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="4">
+                <label class="form-check-label" for="inlineRadio3">4</label>
+              </div>
+              <div class="form-check form-check-inline text-black">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="5">
+                <label class="form-check-label" for="inlineRadio3">5</label>
+              </div>
+              
+          </div>
+        <input value="{{ song_dictionary.song_ID }}" name="song_ID" hidden>
+        <button class="w-10 btn btn-primary btn-primary mt-3" type="submit">Submit</button>
+        </form>
+        </div>
+      </div>
+
+      <!-- Create Playlist----------------------------------------------------------------- -->
+
+
+      <div class="content">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button class="btn btn-warning" style="width:150px; height:40px" onclick="openPopup()">Create Playlist</button>
+          <div id="playlistPopup" class="popup" style="width: 132px">
+              <div class="popup-content">
+              <span class="close" onclick="closePopup()">&times;</span>
+              <h2>Create a Playlist</h2>
+              <form action="/create_playlist_action" method='POST'>
+                  <label for="playlistName">Playlist Name:</label>
+                  <input type="text" id="playlistName" name="playlistName" required>
+                  <input type="text" name="song_id" value="{{song_dictionary.song_ID}}" hidden>
+                  <input type="submit" value="Create Playlist">
+              </form>
+              </div>
+          </div>
+
+          
+          
+
+          <style>
+              /* ... (existing styles) */
+              
+              /* Popup styles */
+              .popup {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+              }
+              
+              .popup-content {
+                background-color: #fff;
+                width: 300px;
+                margin: 100px auto;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+              }
+              
+              .close {
+                float: right;
+                cursor: pointer;
+              }
+              
+          </style>
+              
+          <script>
+              function openPopup() {
+            document.getElementById('playlistPopup').style.display = 'block';
+          }
+          
+          function closePopup() {
+            document.getElementById('playlistPopup').style.display = 'none';
+          }
+          
+          </script>
+      </div>
+        
+      <div class="content d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+        <form class="" action="/add_to_playlist_action" method="POST">
+          <select class="form-select" aria-label="Default select example" name="playlist_name">
+              <option selected>Select Playlist</option>
+              {% if playlist_list %}
+              {% for playlist in playlist_list %}
+              <option value="{{ playlist.playlist_name }}">{{ playlist.playlist_name }}</option>
+              {% endfor %}
+              {% endif %}
+          </select>
+            <input type="text" name="song_id" value="{{song_dictionary.song_ID}}" hidden>
+        
+            <div class="content d-grid gap-2 d-md-flex justify-content-md-end mt-2">
+              <button class="btn btn-success" type="submit" style="width:155px">Add to Playlist</button>
+            </div>
+        </form>
+      </div>
+      
+
+    </div>
+    
+    </div>
+  </div>
+
+  
+
+  <!-- Load the main script for the player -->
+  <script>
+      let now_playing = document.querySelector(".now-playing");
+      let track_art = document.querySelector(".track-art");
+      let track_name = document.querySelector(".track-name");
+      let track_artist = document.querySelector(".track-artist");
+
+      let playpause_btn = document.querySelector(".playpause-track");
+      let next_btn = document.querySelector(".next-track");
+      let prev_btn = document.querySelector(".prev-track");
+
+      let seek_slider = document.querySelector(".seek_slider");
+      let volume_slider = document.querySelector(".volume_slider");
+      let curr_time = document.querySelector(".current-time");
+      let total_duration = document.querySelector(".total-duration");
+
+      let track_index = 0;
+      let isPlaying = false;
+      let updateTimer;
+
+      // Create new audio element
+      let curr_track = document.createElement('audio');
+
+      // Define the tracks that have to be played
+      let track_list = [
+        {
+          name: "{{ song_dictionary.song_name }}",
+          artist: "{{song_dictionary.artist}}",
+          image: "https://media.tenor.com/b8o4QL3NxV4AAAAC/sound-wave-waves.gif",
+          path: "/static/songs/{{ song_dictionary.file_name }}"
+
+        }
+      
+      ];
+
+      function random_bg_color() {
+
+        // Get a number between 64 to 256 (for getting lighter colors)
+        let red = Math.floor(Math.random() * 100) + 150;
+        let green = Math.floor(Math.random() * 100) + 150;
+        let blue = Math.floor(Math.random() * 100) + 150;
+
+        // Construct a color withe the given values
+        let bgColor = "rgb(" + red + "," + green + "," + blue + ")";
+
+        // Set the background to that color
+        document.body.style.background = bgColor;
+      }
+
+      function loadTrack(track_index) {
+        clearInterval(updateTimer);
+        resetValues();
+        curr_track.src = track_list[track_index].path;
+        curr_track.load();
+
+        track_art.style.backgroundImage = "url(" + track_list[track_index].image + ")";
+        track_name.textContent = track_list[track_index].name;
+        track_artist.textContent = track_list[track_index].artist;
+        now_playing.textContent = "PLAYING " + "{{ song_dictionary.song_ID }}" + " OF " + "10";
+
+        updateTimer = setInterval(seekUpdate, 1000);
+        curr_track.addEventListener("ended", nextTrack);
+        random_bg_color();
+      }
+
+      function resetValues() {
+        curr_time.textContent = "00:00";
+        total_duration.textContent = "00:00";
+        seek_slider.value = 0;
+      }
+
+      // Load the first track in the tracklist
+      loadTrack(track_index);
+
+      function playpauseTrack() {
+        if (!isPlaying) playTrack();
+        else pauseTrack();
+      }
+
+      function playTrack() {
+        curr_track.play();
+        isPlaying = true;
+        playpause_btn.innerHTML = '<i class="fa fa-pause-circle fa-5x"></i>';
+      }
+
+      function pauseTrack() {
+        curr_track.pause();
+        isPlaying = false;
+        playpause_btn.innerHTML = '<i class="fa fa-play-circle fa-5x"></i>';;
+      }
+
+      function nextTrack() {
+        if (track_index < track_list.length - 1)
+          track_index += 1;
+        else track_index = 0;
+        loadTrack(track_index);
+        playTrack();
+      }
+
+      function prevTrack() {
+        if (track_index > 0)
+          track_index -= 1;
+        else track_index = track_list.length;
+        loadTrack(track_index);
+        playTrack();
+      }
+
+      function seekTo() {
+        let seekto = curr_track.duration * (seek_slider.value / 100);
+        curr_track.currentTime = seekto;
+      }
+
+      function setVolume() {
+        curr_track.volume = volume_slider.value / 100;
+      }
+
+      function seekUpdate() {
+        let seekPosition = 0;
+
+        if (!isNaN(curr_track.duration)) {
+          seekPosition = curr_track.currentTime * (100 / curr_track.duration);
+
+          seek_slider.value = seekPosition;
+
+          let currentMinutes = Math.floor(curr_track.currentTime / 60);
+          let currentSeconds = Math.floor(curr_track.currentTime - currentMinutes * 60);
+          let durationMinutes = Math.floor(curr_track.duration / 60);
+          let durationSeconds = Math.floor(curr_track.duration - durationMinutes * 60);
+
+          if (currentSeconds < 10) { currentSeconds = "0" + currentSeconds; }
+          if (durationSeconds < 10) { durationSeconds = "0" + durationSeconds; }
+          if (currentMinutes < 10) { currentMinutes = "0" + currentMinutes; }
+          if (durationMinutes < 10) { durationMinutes = "0" + durationMinutes; }
+
+          curr_time.textContent = currentMinutes + ":" + currentSeconds;
+          total_duration.textContent = durationMinutes + ":" + durationSeconds;
+        }
+      }
+
+    </script>      
+    
+    <style>
+      body {
+    background-color: lightgreen;
+
+    /* Smoothly transition the background color */
+    transition: background-color .5s;
+  }
+
+  .player {
+    height: 85vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .details {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 25px;
+  }
+
+  .track-art {
+    margin: 25px;
+    height: 250px;
+    width: 250px;
+    background-image: url("https://images.pexels.com/photos/262034/pexels-photo-262034.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260");
+    background-size: cover;
+    border-radius: 15%;
+  }
+
+  .now-playing {
+    font-size: 1rem;
+  }
+
+  .track-name {
+    font-size: 3rem;
+  }
+
+  .track-artist {
+    font-size: 1.5rem;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .playpause-track, .prev-track, .next-track {
+    padding: 25px;
+    opacity: 0.8;
+
+    /* Smoothly transition the opacity */
+    transition: opacity .2s;
+  }
+
+  .playpause-track:hover, .prev-track:hover, .next-track:hover {
+    opacity: 1.0;
+  }
+
+  .slider_container {
+    width: 75%;
+    max-width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Modify the appearance of the slider */
+  .seek_slider, .volume_slider {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    height: 5px;
+    background: black;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+
+  /* Modify the appearance of the slider thumb */
+  .seek_slider::-webkit-slider-thumb, .volume_slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: white;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+
+  .seek_slider:hover, .volume_slider:hover {
+    opacity: 1.0;
+  }
+
+  .seek_slider {
+    width: 60%;
+  }
+
+  .volume_slider {
+    width: 30%;
+  }
+
+  .current-time, .total-duration {
+    padding: 10px;
+  }
+
+  i.fa-volume-down, i.fa-volume-up {
+    padding: 10px;
+  }
+
+  i.fa-play-circle, i.fa-pause-circle, i.fa-step-forward, i.fa-step-backward {
+    cursor: pointer;
+  }
+  </style>
+
+  <!-- this style belongs to playlist  -->
+  <style>
+    #border {
+  border: 2px solid grey;
+  border-radius: 5px;
+}
+  </style>
+{% endblock %}
+
+
+
+
+
